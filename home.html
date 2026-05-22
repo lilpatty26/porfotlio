@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patrick Twum Nyanor — Computer Engineering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e14; --bg2: #0d1117; --bg3: #111820; --panel: #141c26;
+    --border: #1e2d3d; --border2: #243447;
+    --green: #39d353; --green2: #2ea043; --cyan: #58d1ff; --cyan2: #1f8ea6;
+    --amber: #e3b341; --red: #f85149; --purple: #bc8cff;
+    --text: #cdd9e5; --text2: #768390; --text3: #444d56;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'JetBrains Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 14px; }
+  body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); pointer-events: none; z-index: 9999; }
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(10,14,20,0.95); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 52px; backdrop-filter: blur(8px); }
+  .nav-logo { font-size: 0.85rem; color: var(--green); text-decoration: none; font-weight: 500; }
+  .nav-logo .prompt { color: var(--text2); }
+  .nav-links { display: flex; gap: 0; list-style: none; border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+  .nav-links li { border-right: 1px solid var(--border); }
+  .nav-links li:last-child { border-right: none; }
+  .nav-links a { display: block; padding: 0.4rem 1rem; color: var(--text2); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.05em; transition: background 0.15s, color 0.15s; }
+  .nav-links a:hover { background: var(--panel); color: var(--cyan); }
+  .hero { min-height: 92vh; display: flex; align-items: center; padding: 4rem 5%; position: relative; overflow: hidden; }
+  .hero-grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(30,45,61,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(30,45,61,0.35) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%); }
+  .hero-glow { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(57,211,83,0.06) 0%, transparent 70%); top: 50%; left: 10%; transform: translateY(-50%); pointer-events: none; }
+  .hero-inner { position: relative; z-index: 1; width: 100%; }
+  .hero-top { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .terminal-window { background: var(--panel); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden; width: 100%; }
+  .terminal-bar { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .t-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .t-dot.red { background: #ff5f57; } .t-dot.amber { background: #febc2e; } .t-dot.green { background: #28c840; }
+  .terminal-title { color: var(--text3); font-size: 0.7rem; margin-left: 0.5rem; }
+  .terminal-body { padding: 1.25rem 1.5rem; }
+  .t-line { margin-bottom: 0.4rem; font-size: 0.8rem; }
+  .t-prompt { color: var(--green); } .t-cmd { color: var(--text); } .t-output { color: var(--text2); } .t-key { color: var(--cyan); } .t-val { color: var(--amber); }
+  .t-cursor { display: inline-block; width: 8px; height: 14px; background: var(--green); vertical-align: middle; animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .hero-name { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; line-height: 1.1; color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+  .hero-name .accent { color: var(--green); }
+  .hero-role { font-size: 0.9rem; color: var(--cyan); margin-bottom: 0.5rem; }
+  .hero-role::before { content: '// '; color: var(--text3); }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .hero-badge { background: rgba(57,211,83,0.08); border: 1px solid rgba(57,211,83,0.18); color: var(--green); font-size: 0.68rem; padding: 0.25rem 0.65rem; border-radius: 3px; }
+  .hero-desc { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text2); max-width: 520px; margin-bottom: 2rem; line-height: 1.8; font-weight: 300; }
+  .hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn-green { background: var(--green2); color: #fff; padding: 0.6rem 1.4rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em; transition: background 0.2s; }
+  .btn-green:hover { background: var(--green); color: #0a0e14; }
+  .btn-ghost { border: 1px solid var(--border2); color: var(--text2); padding: 0.6rem 1.4rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em; transition: border-color 0.2s, color 0.2s; }
+  .btn-ghost:hover { border-color: var(--cyan2); color: var(--cyan); }
+  section { padding: 5rem 5%; }
+  section:nth-child(even) { background: var(--bg2); }
+  .section-inner { max-width: 960px; margin: 0 auto; }
+  .section-header { margin-bottom: 2.5rem; }
+  .sec-comment { color: var(--text3); font-size: 0.75rem; margin-bottom: 0.3rem; }
+  .sec-comment::before { content: '// '; }
+  .sec-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
+  .sec-fn { color: var(--cyan); }
+  .sec-fn::after { content: '()'; color: var(--text3); }
+  .sec-line { width: 40px; height: 2px; background: var(--green2); margin-top: 0.8rem; }
+  .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; align-items: start; }
+  .about-text p { font-family: 'Inter', sans-serif; color: var(--text2); font-size: 0.95rem; margin-bottom: 1.1rem; line-height: 1.85; font-weight: 300; }
+  .about-panel { background: var(--panel); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden; }
+  .panel-header { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; display: flex; gap: 0.4rem; align-items: center; }
+  .panel-fname { color: var(--text3); font-size: 0.7rem; margin-left: 0.4rem; }
+  .panel-body { padding: 1rem 1.25rem; }
+  .code-line { font-size: 0.78rem; margin-bottom: 0.3rem; line-height: 1.6; }
+  .c-gray { color: var(--text3); } .c-key { color: var(--purple); } .c-str { color: var(--amber); } .c-cyan { color: var(--cyan); } .c-grn { color: var(--green); } .c-num { color: #d2a8ff; }
+  .indent { padding-left: 1.2rem; } .indent2 { padding-left: 2.4rem; }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+  .skill-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem; transition: border-color 0.2s; }
+  .skill-card:hover { border-color: var(--border2); }
+  .skill-card-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+  .skill-icon { font-size: 0.7rem; color: var(--green); font-weight: 700; }
+  .skill-card h3 { font-size: 0.75rem; color: var(--cyan); letter-spacing: 0.08em; font-weight: 500; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .skill-tag { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 3px; }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .project-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.25s, transform 0.2s; }
+  .project-card:hover { border-color: var(--green2); transform: translateY(-2px); }
+  .project-card-header { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .proj-num { color: var(--text3); font-size: 0.7rem; }
+  .proj-dots { display: flex; gap: 0.3rem; }
+  .proj-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); }
+  .project-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .project-card h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+  .project-card h3::before { content: '> '; color: var(--green); }
+  .project-card p { font-family: 'Inter', sans-serif; font-size: 0.875rem; color: var(--text2); flex: 1; margin-bottom: 1.1rem; line-height: 1.7; font-weight: 300; }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1.1rem; }
+  .tech-tag { background: rgba(57,211,83,0.08); color: var(--green); border: 1px solid rgba(57,211,83,0.2); font-size: 0.68rem; padding: 0.15rem 0.55rem; border-radius: 3px; }
+  .project-links { display: flex; gap: 1rem; }
+  .proj-link { font-size: 0.72rem; color: var(--cyan2); text-decoration: none; transition: color 0.15s; }
+  .proj-link:hover { color: var(--cyan); }
+  .proj-link::before { content: '↗ '; }
+  .add-card { background: var(--panel); border: 1px dashed var(--border); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; color: var(--text3); min-height: 180px; font-size: 0.8rem; }
+  .add-card .plus { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .resume-bar { background: var(--panel); border: 1px solid var(--border2); border-radius: 6px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+  .resume-bar p { color: var(--text2); font-size: 0.8rem; }
+  .resume-bar p span { color: var(--amber); }
+  .btn-dl { background: transparent; border: 1px solid var(--green2); color: var(--green); padding: 0.5rem 1.2rem; border-radius: 4px; text-decoration: none; font-size: 0.78rem; font-weight: 500; transition: background 0.2s; }
+  .btn-dl:hover { background: rgba(57,211,83,0.1); }
+  .resume-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .resume-col h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 1.5rem; border-left: 2px solid var(--green2); padding-left: 0.75rem; }
+  .r-entry { margin-bottom: 1.75rem; }
+  .r-entry-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.15rem; flex-wrap: wrap; gap: 0.4rem; }
+  .r-entry h4 { font-size: 0.85rem; font-weight: 500; color: var(--text); }
+  .r-date { font-size: 0.7rem; color: var(--amber); }
+  .r-org { font-size: 0.75rem; color: var(--cyan2); margin-bottom: 0.4rem; }
+  .r-entry ul { padding-left: 1rem; }
+  .r-entry li { font-size: 0.78rem; color: var(--text2); margin-bottom: 0.25rem; font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .contact-info p { font-family: 'Inter', sans-serif; color: var(--text2); font-size: 0.9rem; margin-bottom: 1.75rem; line-height: 1.8; font-weight: 300; }
+  .c-item { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem; font-size: 0.8rem; }
+  .c-item-icon { width: 32px; height: 32px; background: var(--panel); border: 1px solid var(--border2); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 0.65rem; flex-shrink: 0; }
+  .c-item-text { color: var(--text2); }
+  .contact-form { display: flex; flex-direction: column; gap: 0.85rem; }
+  .f-group { display: flex; flex-direction: column; gap: 0.35rem; }
+  .f-group label { font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); }
+  .f-group input, .f-group textarea { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 0.6rem 0.875rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text); outline: none; resize: vertical; transition: border-color 0.2s; }
+  .f-group input:focus, .f-group textarea:focus { border-color: var(--green2); }
+  .f-group input::placeholder, .f-group textarea::placeholder { color: var(--text3); }
+  .f-submit { background: var(--green2); color: #fff; border: none; padding: 0.65rem 1.4rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; cursor: pointer; letter-spacing: 0.04em; align-self: flex-start; transition: background 0.2s; }
+  .f-submit:hover { background: var(--green); color: #0a0e14; }
+  .status-bar { background: var(--green2); color: #fff; padding: 0.35rem 5%; display: flex; justify-content: space-between; font-size: 0.68rem; letter-spacing: 0.04em; }
+  footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 1.5rem 5%; text-align: center; color: var(--text3); font-size: 0.72rem; }
+  footer a { color: var(--cyan2); text-decoration: none; }
+  footer a:hover { color: var(--cyan); }
+  @media(max-width:900px){ .hero-top{grid-template-columns:1fr;} } @media(max-width:700px){ .about-grid,.resume-cols,.contact-grid{grid-template-columns:1fr;} .nav-links a{padding:0.4rem 0.6rem;font-size:0.65rem;} section{padding:3.5rem 4%;} }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#hero"><span class="prompt">~/</span>patrick.nyanor</a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#resume">resume</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="hero-left">
+        <h1 class="hero-name">Patrick Twum<br><span class="accent">Nyanor</span></h1>
+        <p class="hero-role">B.S. Computer Engineering · ODU · Class of 2026</p>
+        <div class="hero-badges">
+          <span class="hero-badge">Active Secret Clearance</span>
+          <span class="hero-badge">Power Apps &amp; Power Automate</span>
+          <span class="hero-badge">BI Analyst</span>
+          <span class="hero-badge">Cum Laude · 3.44 GPA</span>
+        </div>
+        <p class="hero-desc">Computer Engineering grad with hands-on experience delivering Power Platform solutions, BI dashboards, and ETL pipelines for military and government clients in Hampton Roads.</p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn-green">./view-projects</a>
+          <a href="#contact" class="btn-ghost">./contact-me</a>
+        </div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-bar">
+          <span class="t-dot red"></span><span class="t-dot amber"></span><span class="t-dot green"></span>
+          <span class="terminal-title">bash — ~/portfolio</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd">whoami</span></div>
+          <div class="t-line"><span class="t-output">Patrick Twum Nyanor</span></div>
+          <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">❯</span> <span class="t-cmd">cat info.json</span></div>
+          <div class="t-line"><span class="t-output">{</span></div>
+          <div class="t-line indent"><span class="t-key">"role"</span><span class="t-output">: </span><span class="t-val">"Power Platform Dev · BI Analyst"</span><span class="t-output">,</span></div>
+          <div class="t-line indent"><span class="t-key">"degree"</span><span class="t-output">: </span><span class="t-val">"B.S. CompEng · Cum Laude"</span><span class="t-output">,</span></div>
+          <div class="t-line indent"><span class="t-key">"clearance"</span><span class="t-output">: </span><span class="t-val">"Active Secret"</span><span class="t-output">,</span></div>
+          <div class="t-line indent"><span class="t-key">"location"</span><span class="t-output">: </span><span class="t-val">"Norfolk, VA"</span><span class="t-output">,</span></div>
+          <div class="t-line indent"><span class="t-key">"status"</span><span class="t-output">: </span><span class="t-val">"open to opportunities"</span></div>
+          <div class="t-line"><span class="t-output">}</span></div>
+          <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">❯</span> <span class="t-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="sec-comment">get to know me</p>
+      <h2 class="sec-title"><span class="sec-fn">aboutMe</span></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm Patrick Twum Nyanor, a Computer Engineering graduate from Old Dominion University (Cum Laude, 3.44 GPA) with a double minor in Electrical Engineering and Computer Science. I hold an Active Secret Clearance.</p>
+        <p>Currently a Power Platform Developer and BI Analyst at Plateau Software Group, I've architected 30+ Power BI dashboards, automated workflows for 100+ users, and digitized legacy systems for 200+ military personnel. Previously, I served as a Data Engineering Intern at Military Sealift Command building ETL pipelines and managing integrity for mission-critical DOD datasets.</p>
+        <p>I thrive at the intersection of data, automation, and systems engineering — turning complex operational problems into clean, scalable solutions. Dean's List 5 semesters. Ready to ship.</p>
+      </div>
+      <div class="about-panel">
+        <div class="panel-header">
+          <span class="t-dot red"></span><span class="t-dot amber"></span><span class="t-dot green"></span>
+          <span class="panel-fname">profile.json</span>
+        </div>
+        <div class="panel-body">
+          <div class="code-line c-gray">{</div>
+          <div class="code-line indent"><span class="c-key">"name"</span>: <span class="c-str">"Patrick Twum Nyanor"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"degree"</span>: <span class="c-str">"B.S. Computer Engineering"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"university"</span>: <span class="c-str">"Old Dominion University"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"graduated"</span>: <span class="c-str">"May 2026"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"gpa"</span>: <span class="c-num">3.44</span>,</div>
+          <div class="code-line indent"><span class="c-key">"honors"</span>: <span class="c-str">"Cum Laude"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"clearance"</span>: <span class="c-str">"Active Secret"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"location"</span>: <span class="c-str">"Norfolk, VA"</span>,</div>
+          <div class="code-line indent"><span class="c-key">"focus"</span>: [</div>
+          <div class="code-line indent2"><span class="c-str">"Power Platform"</span>,</div>
+          <div class="code-line indent2"><span class="c-str">"Data Engineering"</span>,</div>
+          <div class="code-line indent2"><span class="c-str">"Business Intelligence"</span></div>
+          <div class="code-line indent">],</div>
+          <div class="code-line indent"><span class="c-key">"available"</span>: <span class="c-grn">true</span></div>
+          <div class="code-line c-gray">}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="sec-comment">technologies and tools</p>
+      <h2 class="sec-title"><span class="sec-fn">getSkills</span></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">▸</span><h3>Power Platform & Cloud</h3></div>
+        <div class="skill-tags">
+          <span class="skill-tag">Power Apps</span><span class="skill-tag">Power Automate</span><span class="skill-tag">Power BI</span>
+          <span class="skill-tag">Dataverse</span><span class="skill-tag">Copilot Studio</span><span class="skill-tag">SharePoint</span>
+          <span class="skill-tag">Azure</span><span class="skill-tag">Power Fx</span><span class="skill-tag">Power Pages</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">▸</span><h3>Languages & Data</h3></div>
+        <div class="skill-tags">
+          <span class="skill-tag">SQL</span><span class="skill-tag">Python</span><span class="skill-tag">DAX</span>
+          <span class="skill-tag">Power Query (M)</span><span class="skill-tag">JSON</span><span class="skill-tag">C/C++</span>
+          <span class="skill-tag">Java</span><span class="skill-tag">VHDL</span><span class="skill-tag">VBA</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">▸</span><h3>Databases & Architecture</h3></div>
+        <div class="skill-tags">
+          <span class="skill-tag">Dataverse</span><span class="skill-tag">MS Access</span><span class="skill-tag">MySQL</span>
+          <span class="skill-tag">PySpark</span><span class="skill-tag">REST APIs</span><span class="skill-tag">Relational Modeling</span>
+          <span class="skill-tag">SPFx</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">▸</span><h3>Analytics & Tools</h3></div>
+        <div class="skill-tags">
+          <span class="skill-tag">Tableau</span><span class="skill-tag">Advanced Excel</span><span class="skill-tag">ETL Pipelines</span>
+          <span class="skill-tag">Data Modeling</span><span class="skill-tag">Microsoft Office</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="sec-comment">things i've built</p>
+      <h2 class="sec-title"><span class="sec-fn">listProjects</span></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-card-header">
+          <span class="proj-num">// proj_01 · May 2026</span>
+          <div class="proj-dots"><span class="proj-dot"></span><span class="proj-dot"></span><span class="proj-dot"></span></div>
+        </div>
+        <div class="project-body">
+          <h3>Intelligent Booking & Workflow Portal</h3>
+          <p>Led development of a multi-layered conflict detection algorithm using Power Fx to evaluate overlapping scheduling rules in real-time — preventing 100% of double-bookings and enforcing weekend/holiday lockdowns. Dynamic approval pipelines reduced workflow bottlenecks by 70%.</p>
+          <div class="project-tech">
+            <span class="tech-tag">Power Apps</span><span class="tech-tag">Power Automate</span>
+            <span class="tech-tag">Power Fx</span><span class="tech-tag">JSON</span><span class="tech-tag">Dataverse</span>
+          </div>
+          <div class="project-links">
+            <span style="font-size:0.72rem;color:var(--text3);font-style:italic;">// Built at Plateau Software Group</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-header">
+          <span class="proj-num">// proj_02 · Jun 2025</span>
+          <div class="proj-dots"><span class="proj-dot"></span><span class="proj-dot"></span><span class="proj-dot"></span></div>
+        </div>
+        <div class="project-body">
+          <h3>Training Database & Workflow Automation</h3>
+          <p>Automated compliance tracking system for 2,000+ users. Power BI for reporting, Power Automate for targeted email reminders, and SQL in MS Access for database updates. Replaced manual Excel tracking and eliminated individual email outreach.</p>
+          <div class="project-tech">
+            <span class="tech-tag">Power BI</span><span class="tech-tag">Power Automate</span>
+            <span class="tech-tag">SQL</span><span class="tech-tag">MS Access</span>
+          </div>
+          <div class="project-links">
+            <span style="font-size:0.72rem;color:var(--text3);font-style:italic;">// Built at Plateau Software Group</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-header">
+          <span class="proj-num">// proj_03 · In Progress</span>
+          <div class="proj-dots"><span class="proj-dot"></span><span class="proj-dot"></span><span class="proj-dot"></span></div>
+        </div>
+        <div class="project-body">
+          <h3>Federal Spending Data Pipeline & BI Dashboard</h3>
+          <p>End-to-end data engineering project pulling federal contract and spending data from the USASpending.gov API. Ingesting, cleaning, and transforming data using PySpark and Python, loading into a PostgreSQL database, and surfacing insights through Power BI dashboards — showing spending trends by agency, contractor, region, and fiscal year.</p>
+          <div class="project-tech">
+            <span class="tech-tag">Python</span><span class="tech-tag">PySpark</span><span class="tech-tag">PostgreSQL</span>
+            <span class="tech-tag">Power BI</span><span class="tech-tag">REST API</span><span class="tech-tag">ETL</span><span class="tech-tag">SQL</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="#">GitHub</a>
+            <a class="proj-link" href="#">Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="add-card">
+        <div class="plus">+</div>
+        <p style="color:var(--text3)">// more projects coming</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="resume">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="sec-comment">experience and education</p>
+      <h2 class="sec-title"><span class="sec-fn">getResume</span></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="resume-bar">
+      <p><span>$</span> ls ~/documents/resume.pdf &nbsp;→&nbsp; Download a copy of my full resume</p>
+      <a href="https://drive.google.com/file/d/1ytWOtHSp_1AirXZM4ACbCz7NXyyQq2df/view?usp=sharing" class="btn-dl" download>↓ resume.pdf</a>
+    </div>
+    <div class="resume-cols">
+      <div class="resume-col">
+        <h3>Education</h3>
+        <div class="r-entry">
+          <div class="r-entry-top">
+            <h4>B.S. Computer Engineering</h4>
+            <span class="r-date">Aug 2022 – May 2026</span>
+          </div>
+          <p class="r-org">Old Dominion University · Norfolk, VA</p>
+          <ul>
+            <li>GPA: 3.44 · Cum Laude</li>
+            <li>Double Minors: Electrical Engineering & Computer Science</li>
+            <li>Dean's List: Spring 2023, Fall 2023, Spring 2025, Fall 2025, Spring 2026</li>
+            <li>Coursework: Embedded Systems, Machine Learning, Data Structures & Algorithms, Software Engineering, Circuit Analysis</li>
+          </ul>
+        </div>
+        <div class="r-entry" style="margin-top:1.5rem">
+          <h3 style="margin-bottom:1rem">Certifications</h3>
+          <div class="r-entry-top"><h4>SQL for Data Analysis</h4><span class="r-date">Completed</span></div>
+          <div class="r-entry-top" style="margin-top:0.5rem"><h4>PL-900 Power Platform Fundamentals</h4><span class="r-date">In Progress</span></div>
+          <div class="r-entry-top" style="margin-top:0.5rem"><h4>CompTIA Security+</h4><span class="r-date">In Progress</span></div>
+        </div>
+      </div>
+      <div class="resume-col">
+        <h3>Experience</h3>
+        <div class="r-entry">
+          <div class="r-entry-top">
+            <h4>Power Platform Developer · BI Analyst</h4>
+            <span class="r-date">Feb 2026 – Present</span>
+          </div>
+          <p class="r-org">Plateau Software Group · Virginia Beach, VA</p>
+          <ul>
+            <li>Architected 30+ Power BI dashboards, cutting decision cycles by 30%</li>
+            <li>Engineered 40+ Power Automate & SharePoint workflows, saving 2 hrs/day for 100+ users</li>
+            <li>Developed 30+ custom Power Apps, boosting data accuracy by 40%</li>
+            <li>Administered SharePoint intranet for 200+ military personnel</li>
+          </ul>
+        </div>
+        <div class="r-entry">
+          <div class="r-entry-top">
+            <h4>Data Engineering Intern</h4>
+            <span class="r-date">Jul 2024 – Feb 2026</span>
+          </div>
+          <p class="r-org">Military Sealift Command · Norfolk, VA</p>
+          <ul>
+            <li>Built ETL pipelines with advanced SQL for real-time mission reporting</li>
+            <li>Reduced reporting discrepancies by 30% via improved data architecture</li>
+            <li>Managed 10 mission-critical DOD datasets under federal SDLC standards</li>
+          </ul>
+        </div>
+        <div class="r-entry">
+          <div class="r-entry-top">
+            <h4>Student Lead IT Technician</h4>
+            <span class="r-date">Mar 2023 – May 2026</span>
+          </div>
+          <p class="r-org">Old Dominion University · Norfolk, VA</p>
+          <ul>
+            <li>Led Tier 1/2 team of 5+, resolving 20+ tickets/week at 60% first-call resolution</li>
+            <li>Authored 30+ SOPs, cutting troubleshooting time by 20%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="sec-comment">let's connect</p>
+      <h2 class="sec-title"><span class="sec-fn">contact</span></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>Open to full-time roles, contract work, and collaborations — especially in Power Platform, data engineering, BI, or government/defense tech. Let's build something great.</p>
+        <div class="c-item"><div class="c-item-icon">@</div><a href="mailto:nyanorpatrick66@gmail.com" class="c-item-text" style="text-decoration:underline;text-underline-offset:3px;">nyanorpatrick66@gmail.com</a></div>
+        <div class="c-item"><div class="c-item-icon">☎</div><a href="tel:+15713436482" class="c-item-text" style="text-decoration:underline;text-underline-offset:3px;">(571) 343-6482</a></div>
+        <div class="c-item"><div class="c-item-icon">in</div><a href="https://www.linkedin.com/in/patricknyanor" target="_blank" class="c-item-text" style="text-decoration:underline;text-underline-offset:3px;">linkedin.com/in/patricknyanor</a></div>
+        <div class="c-item"><div class="c-item-icon">📍</div><span class="c-item-text">Norfolk, VA</span></div>
+      </div>
+      <div class="contact-form">
+        <div class="f-group"><label>name</label><input type="text" placeholder="Your full name"></div>
+        <div class="f-group"><label>email</label><input type="email" placeholder="your@email.com"></div>
+        <div class="f-group"><label>subject</label><input type="text" placeholder="role / collab / other"></div>
+        <div class="f-group"><label>message</label><textarea rows="5" placeholder="// write your message here..."></textarea></div>
+        <button class="f-submit" id="submit-btn" onclick="submitForm(event)">./send-message</button>
+        <p id="form-msg" style="font-size:0.75rem;margin-top:0.5rem;display:none;"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="status-bar">
+  <span>● patrick.nyanor — portfolio</span>
+  <span>Power Platform Developer · BI Analyst · Active Secret Clearance</span>
+  <span>Norfolk, VA</span>
+</div>
+
+<footer>
+  <p>// © 2026 Patrick Twum Nyanor &nbsp;·&nbsp; B.S. Computer Engineering, ODU &nbsp;·&nbsp; <a href="#hero">↑ back to top</a></p>
+</footer>
+
+
+<script>
+async function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const msg = document.getElementById('form-msg');
+  const name = document.querySelector('.contact-form input[type=text]').value;
+  const email = document.querySelector('.contact-form input[type=email]').value;
+  const subject = document.querySelectorAll('.contact-form input[type=text]')[1].value;
+  const message = document.querySelector('.contact-form textarea').value;
+  if (!name || !email || !message) {
+    msg.style.color = 'var(--amber)'; msg.textContent = '// please fill in all required fields'; msg.style.display = 'block'; return;
+  }
+  btn.textContent = '// sending...'; btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/xredqddz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, subject, message })
+    });
+    if (res.ok) {
+      msg.style.color = 'var(--green)'; msg.textContent = '// message sent successfully!'; msg.style.display = 'block';
+      btn.textContent = '// sent ✓';
+    } else {
+      throw new Error('failed');
+    }
+  } catch {
+    msg.style.color = 'var(--red)'; msg.textContent = '// something went wrong — try emailing directly'; msg.style.display = 'block';
+    btn.textContent = './send-message'; btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
